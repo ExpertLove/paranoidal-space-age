@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paranoidal × Space Age — Экспедиция домой (концепт)</title>
+<style>
+:root{--bg:#06080c;--card:rgba(12,16,23,.74);--line:rgba(255,255,255,.09);--text:#ece8e0;--muted:#a2a6ad;--accent:#f0a030;--teal:#3fd6cc;--violet:#ad86ff;--amber:#ffb547;--gold:#ffd86b;--red:#ff6f5e;--green:#86d973}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow:hidden}
+#gl{position:fixed;inset:0;width:100vw;height:100vh;display:block;transition:opacity .4s ease}
+#gl.fade{opacity:0}
+#shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(4,6,9,.80) 0%,rgba(4,6,9,.42) 42%,rgba(4,6,9,0) 68%);transition:background .6s}
+#shade.strong{background:linear-gradient(90deg,rgba(4,6,9,.86) 0%,rgba(4,6,9,.72) 60%,rgba(4,6,9,.45) 100%)}
+#labels{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.lbl{position:absolute;transform:translate(-50%,-135%);font-size:13px;font-weight:650;letter-spacing:.02em;padding:3px 9px;border-radius:7px;background:rgba(6,8,12,.72);border:1px solid var(--line);white-space:nowrap;display:none}
+#deck{position:fixed;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;scrollbar-width:none}
+#deck::-webkit-scrollbar{display:none}
+.slide{min-height:100vh;scroll-snap-align:start;display:flex;align-items:center;padding:7vh 6vw 9vh;position:relative;cursor:grab}
+.slide.dragging{cursor:grabbing}
+.card{max-width:610px;background:var(--card);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;padding:30px 34px;box-shadow:0 24px 70px rgba(0,0,0,.5);cursor:auto}
+.card.wide{max-width:1040px}
+.kicker{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:12px}
+h1{font-size:clamp(40px,5.4vw,72px);line-height:1;margin:0 0 18px;font-weight:800;letter-spacing:-.015em}
+h2{font-size:clamp(26px,3vw,38px);line-height:1.1;margin:0 0 14px;font-weight:750}
+h3{margin:0 0 8px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+p{font-size:17px;line-height:1.55;margin:0 0 12px;color:#ddd9d1}
+.lead{font-size:20px;line-height:1.5}
+ul,ol{margin:6px 0 0;padding-left:21px}
+li{margin:7px 0;line-height:1.48;font-size:16px;color:#ddd9d1}
+.muted{color:var(--muted);font-size:14px;line-height:1.5}
+code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.86em;background:rgba(255,255,255,.07);padding:1px 6px;border-radius:5px;color:#ffd8a0;white-space:nowrap}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 18px}
+.pill{font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05)}
+.pill.warn{border-color:rgba(255,181,71,.45);color:var(--amber)}
+.tag{display:inline-block;font-size:11px;font-weight:750;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:5px;margin-right:7px;vertical-align:1px}
+.tag.ok{background:rgba(134,217,115,.15);color:var(--green)}
+.tag.open{background:rgba(255,181,71,.15);color:var(--amber)}
+.tag.no{background:rgba(255,111,94,.15);color:var(--red)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:6px}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:6px}
+.box{border:1px solid var(--line);border-radius:13px;padding:15px 18px;background:rgba(255,255,255,.035)}
+.box.ok{border-color:rgba(134,217,115,.3)}
+.box.no{border-color:rgba(255,111,94,.3)}
+.box.now{border-color:rgba(255,255,255,.14)}
+.box.next{border-color:rgba(240,160,48,.4)}
+.box p{font-size:15.5px;margin:0}
+.box li{font-size:15px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 12px}
+.step{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:rgba(255,255,255,.035)}
+.step b{display:block;font-size:15px;margin-bottom:4px}
+.step span{font-size:13.5px;color:var(--muted);line-height:1.4;display:block}
+.step i{font-style:normal;font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.1em}
+.loop{font-size:14px;color:var(--muted);border-left:3px solid var(--accent);padding:6px 0 6px 12px;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:15.5px;margin-top:8px}
+th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.z0{color:#dfe3ea}.z1{color:var(--teal)}.z2{color:var(--violet)}.z3{color:var(--amber)}.zh{color:var(--gold)}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:8px 0 16px;font-weight:700;font-size:15px}
+.chain .n{padding:5px 11px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.05)}
+.chain .a{color:var(--muted)}
+.big{font-size:44px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.stat{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 4px}
+.stat .box{flex:1;min-width:150px}
+.stat .box small{display:block;color:var(--muted);font-size:13px;margin-top:6px;line-height:1.35}
+.tierbox{margin:18px 0 6px;padding:16px 18px;border-radius:13px;border:1px solid rgba(240,160,48,.35);background:rgba(240,160,48,.06)}
+.tierrow{display:flex;align-items:center;gap:14px}
+.tierrow b{font-size:15px;white-space:nowrap}
+input[type=range]{flex:1;accent-color:var(--accent);height:24px;cursor:pointer}
+.ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:2px 0 10px 64px}
+#tierText{font-size:15.5px;line-height:1.5;min-height:72px}
+#tierText b{color:var(--accent)}
+.forks{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+.fork{border:1px solid rgba(255,181,71,.3);border-radius:12px;padding:12px 16px;background:rgba(255,181,71,.04)}
+.fork b{display:block;margin-bottom:5px;font-size:15.5px}
+.fork .opt{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px;color:#d4d0c8;line-height:1.4}
+.fork .opt div{padding-left:10px;border-left:2px solid rgba(255,255,255,.15)}
+.check li{list-style:none;position:relative;padding-left:4px}
+.check{padding-left:22px}
+.check li::before{content:"✓";position:absolute;left:-20px;color:var(--green);font-weight:800}
+.qs li{margin:9px 0}
+#nav{position:fixed;right:20px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:5}
+#nav button{width:10px;height:10px;border-radius:50%;border:0;background:rgba(255,255,255,.24);cursor:pointer;padding:0;transition:all .2s}
+#nav button:hover{background:rgba(255,255,255,.6)}
+#nav button.on{background:var(--accent);box-shadow:0 0 0 4px rgba(240,160,48,.22)}
+#hud{position:fixed;left:6vw;bottom:16px;font-size:13px;color:var(--muted);z-index:5;display:flex;gap:18px;align-items:center;pointer-events:none}
+#hud b{color:var(--text);font-weight:650}
+#err{display:none}
+body.nogl{background:radial-gradient(ellipse at 75% 40%,#1b2a3a 0%,#0b1119 45%,#05070a 100%)}
+body.nogl #gl{display:none}
+@media (max-width:900px){
+  .cols,.cols3,.steps{grid-template-columns:1fr}
+  .fork .opt{grid-template-columns:1fr}
+  .slide{align-items:flex-end;padding:5vh 4vw 8vh}
+  .card,.card.wide{padding:22px 20px;width:100%;max-width:100%;min-width:0}
+  code{white-space:normal;word-break:break-word}
+  #hint{display:none}
+  #nav{display:none}
+  #shade{background:linear-gradient(0deg,rgba(4,6,9,.85) 0%,rgba(4,6,9,.3) 60%,rgba(4,6,9,0) 100%)}
+}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="shade"></div>
+<div id="labels"></div>
+<div id="deck">
+
+<!-- 1 -->
+<section class="slide" data-scene="shipyard">
+ <div class="card">
+  <div class="kicker">Paranoidal · концепт финала на Space Age</div>
+  <h1>Экспедиция домой</h1>
+  <p class="lead">Вместо трёх стадий SpaceX строим на орбите огромный корабль, улетаем на миллионы километров и долетаем домой. Это и есть победа.</p>
+  <div class="pills">
+   <span class="pill warn">Мозговой штурм</span>
+   <span class="pill warn">В сборке ничего не изменено</span>
+   <span class="pill">Factorio 2.0.77 + Space Age</span>
+  </div>
+  <p class="muted">Иллюстрации — процедурная 3D-графика в браузере, а не скриншоты игры. Листать: колесо или ↑ ↓. Фон можно вращать мышью.</p>
+ </div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-scene="shipyard">
+ <div class="card">
+  <div class="kicker">Суть</div>
+  <h2>Что меняется в финале</h2>
+  <div class="cols" style="grid-template-columns:1fr">
+   <div class="box now"><h3>Сейчас</h3><p>Вся игра идёт на поверхности. Финал — SpaceModFeorasFork (SpaceX): три стадии, детали просто запускаются в космос. С множителем ×25 это 1050 ракет.</p></div>
+   <div class="box next"><h3>Будет</h3><p>Платформа на орбите становится верфью и научной станцией. Корабль строится из того, что подняли ракеты, улетает очень далеко и прибывает в точку «Дом».</p></div>
+   <div class="box no"><h3>Не будет</h3><p>Планет Space Age, механик качества и прочих механик SA.</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-scene="calm">
+ <div class="card wide">
+  <div class="kicker">Границы</div>
+  <h2>Что берём из Space Age, а что нет</h2>
+  <div class="cols">
+   <div class="box ok"><h3><span class="tag ok">Берём</span></h3>
+    <ul>
+     <li>Космические платформы: хаб, фундамент, грузовые отсеки</li>
+     <li>Двигатели и полёты по маршрутам</li>
+     <li>Сборщики астероидов и сами астероиды, включая опасные</li>
+     <li>Посадочную площадку и грузовые капсулы</li>
+     <li>Победу по прибытии платформы в точку (<code>space-finish-script</code>)</li>
+    </ul>
+   </div>
+   <div class="box no"><h3><span class="tag no">Не берём</span></h3>
+    <ul>
+     <li>Планеты Vulcanus, Gleba, Fulgora, Aquilo и Shattered Planet</li>
+     <li>Качество. Мод <code>quality</code> обязателен для SA, поэтому он включён, но его контент спрятан</li>
+     <li>Порчу, заморозку и переработку в утиль</li>
+     <li>Правки SA в рецептах и технологиях базы и модов: вольфрам, литий, модули</li>
+    </ul>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 4 -->
+<section class="slide" data-scene="route">
+ <div class="card">
+  <div class="kicker">Игровой цикл</div>
+  <h2>Как идёт прохождение</h2>
+  <div class="steps">
+   <div class="step"><i>01</i><b>Nauvis</b><span>Производство как сейчас. Всё для корабля делается внизу.</span></div>
+   <div class="step"><i>02</i><b>Ракеты</b><span>Поднимают здания, топливо и патроны на платформу.</span></div>
+   <div class="step"><i>03</i><b>Полёт</b><span>Корабль уходит всё дальше от Nauvis.</span></div>
+   <div class="step"><i>04</i><b>Редкие астероиды</b><span>С дальностью появляются новые элементы.</span></div>
+   <div class="step"><i>05</i><b>Наука на борту</b><span>Делается только на платформе.</span></div>
+   <div class="step"><i>06</i><b>Новые тиры</b><span>Двигатели, защита, энергия — дальше и быстрее.</span></div>
+  </div>
+  <div class="loop">Шаги 03–06 повторяются от зоны к зоне. Последняя технология открывает финальный отрезок, а прибытие в «Дом» засчитывается как победа.</div>
+ </div>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-scene="route">
+ <div class="card">
+  <div class="kicker">Маршрут</div>
+  <h2>Очень длинный путь</h2>
+  <div class="chain"><span class="n z0">Nauvis</span><span class="a">→</span><span class="n z1">Зона 1</span><span class="a">→</span><span class="n z2">Зона 2</span><span class="a">→</span><span class="n z3">Зона 3</span><span class="a">→</span><span class="n zh">Дом</span></div>
+  <ul>
+   <li>Маршрут — цепочка своих точек на звёздной карте. У каждого отрезка своя длина.</li>
+   <li>В ванильном SA Nauvis → Vulcanus — 15 000 км, самый длинный отрезок — 4 000 000 км. У нас весь путь в сотни раз длиннее обычного перелёта: миллионы или десятки миллионов км.</li>
+   <li>Время в пути зависит от тяги, массы и ширины корабля. Подгоняется длиной отрезков.</li>
+   <li>Солнце слабеет. Мощность солнечных панелей задаётся для каждой точки, вдали её можно свести почти к нулю.</li>
+  </ul>
+  <p class="muted" style="margin-top:12px">Схема справа условная, масштаб не соблюдён.</p>
+ </div>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-scene="asteroids">
+ <div class="card">
+  <div class="kicker">Астероиды</div>
+  <h2>Дальше — новые ресурсы и новая опасность</h2>
+  <ul>
+   <li><b>Ресурсы по дальности.</b> В движке шанс появления каждого типа астероида задаётся по дальности вдоль отрезка (<code>asteroid_spawn_definitions</code>). «После X км появляется новый элемент» — это данные, скрипт не нужен.</li>
+   <li><b>Новые элементы</b> — свои типы кусков (<code>asteroid-chunk</code>). Сборщики ловят любые.</li>
+   <li><b>Опасность растёт.</b> В SA пять размеров: кусок, малый, средний, большой и огромный. Большой и огромный снижают физический урон на 2000–3000 за попадание, против них нужны новые турели.</li>
+  </ul>
+  <p style="margin-top:14px"><span class="tag ok">Решено</span>Опасные астероиды — да. Космическая наука — только из астероидов, спутник убирается.</p>
+ </div>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-scene="asteroids">
+ <div class="card">
+  <div class="kicker">Наука</div>
+  <h2>Новая наука — только на платформе</h2>
+  <div class="chain"><span class="n">Редкий кусок</span><span class="a">→</span><span class="n">своя переработка в духе Paranoidal</span><span class="a">→</span><span class="n z1">наука зоны</span></div>
+  <ul>
+   <li>У рецепта науки стоит условие «только в космосе», как у ванильной космической науки.</li>
+   <li>Отдельно запрещать её вблизи Nauvis не нужно: редкие куски есть только в дальних зонах.</li>
+   <li>Платформа — верфь и научная станция. Других производств на борту нет, исключение — заправочная станция.</li>
+  </ul>
+  <p style="margin-top:14px"><span class="tag ok">Решено</span>Переработка своя. Заправочная станция на платформе — да.</p>
+  <p><span class="tag open">Открыто</span>Глубина переработки. Где делать базовую космическую науку для 82 технологий: на платформе у Nauvis или спускать куски вниз.</p>
+ </div>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-scene="route" data-shade="strong">
+ <div class="card wide">
+  <div class="kicker">Прогрессия · черновик</div>
+  <h2>Лестница тиров</h2>
+  <table>
+   <tr><th>Зона</th><th>Что появляется</th><th>Наука</th><th>Что открывает</th></tr>
+   <tr><td class="z0"><b>Орбита Nauvis</b></td><td>обычные куски</td><td>космическая (82 технологии)</td><td>платформа, сборщики, двигатель 1</td></tr>
+   <tr><td class="z1"><b>Зона 1</b></td><td>элемент A</td><td>наука 1</td><td>двигатель 2, турели против средних астероидов</td></tr>
+   <tr><td class="z2"><b>Зона 2</b></td><td>элемент B</td><td>наука 2</td><td>двигатель 3, энергия без солнца</td></tr>
+   <tr><td class="z3"><b>Зона 3</b></td><td>элемент C</td><td>наука 3</td><td>двигатель 4, маршрут «Дом»</td></tr>
+   <tr><td class="zh"><b>Дом</b></td><td>—</td><td>—</td><td><b>победа</b></td></tr>
+  </table>
+  <p class="muted" style="margin-top:14px">Число зон, названия элементов и состав тиров ещё не решены.</p>
+ </div>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-scene="ship">
+ <div class="card">
+  <div class="kicker">Корабль</div>
+  <h2>Корабль растёт с каждым тиром</h2>
+  <ul>
+   <li><span class="tag ok">Решено</span>Цена финала — и в исследованиях, и в размере корабля.</li>
+   <li><b>Двигатели</b> — свои прототипы <code>thruster</code>: у каждого тира своя мощность и своё топливо, например из редкого элемента.</li>
+   <li>Скорость зависит от тяги и массы. Тяжёлому кораблю нужно больше двигателей, топлива и защиты, поэтому размер растёт сам.</li>
+  </ul>
+  <div class="tierbox">
+   <div class="tierrow"><b>Тир</b><input type="range" id="tier" min="1" max="4" step="1" value="2" aria-label="Тир корабля"></div>
+   <div class="ticks"><span>1</span><span>2</span><span>3</span><span>4</span></div>
+   <div id="tierText"></div>
+  </div>
+  <p class="muted">Модель — иллюстрация, а не баланс.</p>
+ </div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-scene="deep">
+ <div class="card">
+  <div class="kicker">Главное ограничение</div>
+  <h2>В пути снабжения нет</h2>
+  <p>Ракета доставляет груз только на платформу на орбите планеты. В дальней зоне корабль ничего не получит с Nauvis и не сбросит науку вниз. Отсюда три развилки:</p>
+  <div class="forks">
+   <div class="fork"><b>1. Где исследовать</b><div class="opt"><div>Лаборатории на борту: исследования общие для фракции, корабль — летающий НИИ</div><div>Экспедиции: слетал в зону, вернулся к Nauvis, спустил науку</div></div></div>
+   <div class="fork"><b>2. Топливо и патроны</b><div class="opt"><div>Только запас с Nauvis: корабль-танкер, всё сожжённое подняли ракетами</div><div>Добыча из астероидов на борту</div></div></div>
+   <div class="fork"><b>3. Энергия вдали от солнца</b><div class="opt"><div>Ядерный реактор на твэлах с Nauvis. Ванильный котёл SA в космосе запрещает</div><div>Новый источник энергии из редкого элемента</div></div></div>
+  </div>
+ </div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-scene="home">
+ <div class="card">
+  <div class="kicker">Финал</div>
+  <h2>Долетели — победа</h2>
+  <ul>
+   <li>Прибытие в точку «Дом» засчитывается как победа.</li>
+   <li>В движке уже есть <code>space-finish-script</code>. Он засчитывает победу, когда платформа прибывает в заданную точку, а точку можно сменить через <code>set_victory_location</code>.</li>
+  </ul>
+  <p style="margin-top:14px"><span class="tag ok">Решено</span>Достаточно долететь, отдельных условий нет.</p>
+  <p class="muted">Ещё не проверено, подключён ли этот скрипт в обычной игре. Если нет, ту же логику добавим в наш <code>control.lua</code>.</p>
+ </div>
+</section>
+
+<!-- 12 -->
+<section class="slide" data-scene="calm">
+ <div class="card">
+  <div class="kicker">Итоги обсуждения</div>
+  <h2>Что уже решено</h2>
+  <ul class="check">
+   <li>Космическая наука — только из астероидов, спутник убирается</li>
+   <li>Опасные астероиды — да</li>
+   <li>Переработка — своя, в духе Paranoidal</li>
+   <li>Победа — достаточно долететь до «Дома»</li>
+   <li>Цена — и в исследованиях, и в размере корабля</li>
+   <li>Заправочная станция на платформе — да</li>
+   <li>Редкие элементы — только из дальних астероидов. Наука из них делается только на платформе и открывает новые тиры</li>
+   <li>Дальность — в сотни раз больше ванильной, корабль гигантский</li>
+   <li>Компоненты SpaceX не используем</li>
+   <li>Без планет SA и без качества</li>
+  </ul>
+ </div>
+</section>
+
+<!-- 13 -->
+<section class="slide" data-scene="calm" data-shade="strong">
+ <div class="card wide">
+  <div class="kicker">Техника</div>
+  <h2>Что потребуется от сборки</h2>
+  <div class="box">
+   <ul>
+    <li>Финал SpaceX уходит, его место занимают платформы Space Age.</li>
+    <li>Space Age требует <code>quality</code> и <code>elevated-rails</code>. Качество включается, но его контент прячется.</li>
+    <li>Многие моды сборки при включённом Space Age сами переключаются на планетарные ветки. Такие привязки откатываем.</li>
+    <li>Space Age меняет и базовую игру: ракету, спутник, модули, категории рецептов. Слой сборки возвращает своё.</li>
+    <li>Всё рассчитано на новую игру.</li>
+   </ul>
+  </div>
+  <h3 style="margin-top:18px">Ориентир баланса</h3>
+  <div class="stat">
+   <div class="box"><div class="big">1050</div><small>ракет по 100 частей требует SpaceX при ×25 — ориентир по расходу</small></div>
+   <div class="box"><div class="big">1000</div><small>банок космической науки даёт сейчас один спутник</small></div>
+   <div class="box"><div class="big">82</div><small>технологии требуют космическую науку</small></div>
+  </div>
+ </div>
+</section>
+
+<!-- 14 -->
+<section class="slide" data-scene="deep">
+ <div class="card">
+  <div class="kicker">Обсуждаем дальше</div>
+  <h2>Открытые вопросы</h2>
+  <ol class="qs">
+   <li>Где исследовать: лаборатории на борту или экспедиции туда-обратно?</li>
+   <li>Топливо и патроны: только запас с Nauvis или добыча на борту?</li>
+   <li>Энергия вдали от солнца: ядерный реактор или новый источник?</li>
+   <li>Сколько зон и тиров?</li>
+   <li>Сколько часов должен длиться полёт домой?</li>
+   <li>Базовая космическая наука: на платформе у Nauvis или куски спускаются вниз?</li>
+   <li>Насколько глубокой будет переработка редких кусков?</li>
+   <li>Что делать с наукой из расширенных ракетных грузов: сделать её наукой зон или убрать?</li>
+   <li>Какие машины Bob и Angels пускать на платформу?</li>
+  </ol>
+ </div>
+</section>
+
+<!-- 15 -->
+<section class="slide" data-scene="home">
+ <div class="card">
+  <div class="kicker">Статус</div>
+  <h2>Где мы сейчас</h2>
+  <p>Есть только концепт. В сборке ничего не изменено, игра не запускалась.</p>
+  <h3 style="margin-top:18px">Дальше</h3>
+  <ol>
+   <li>Закрыть развилки и открытые вопросы.</li>
+   <li>Сделать черновой мод-прототип: маршрут, зоны, куски, наука, двигатели.</li>
+   <li>Снять дамп данных и проверить загрузку.</li>
+   <li>Провести игровой тест.</li>
+  </ol>
+  <p class="muted" style="margin-top:16px">Факты о Space Age сверены с файлами SA 2.0.77 и API прототипов. Цифры сборки взяты из дампа данных модпака.</p>
+ </div>
+</section>
+
+</div>
+<nav id="nav"></nav>
+<div id="hud"><span><b id="cnt">1</b> / <span id="tot">15</span></span><span id="hint">колесо / ↑ ↓ — листать · мышь — вращать сцену</span></div>
+<div id="err"></div>
+
+<script>
+'use strict';
+window.addEventListener('error',function(e){var b=document.getElementById('err');b.textContent+=' | '+e.message;document.documentElement.setAttribute('data-err',b.textContent);});
+(function(){
+/* ================= math ================= */
+const TAU=Math.PI*2,PI=Math.PI;
+const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]];
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]];
+const mulS=(a,s)=>[a[0]*s,a[1]*s,a[2]*s];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const vlen=a=>Math.hypot(a[0],a[1],a[2]);
+const norm=a=>{const l=vlen(a)||1;return [a[0]/l,a[1]/l,a[2]/l];};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+function rng(seed){let a=seed>>>0;return function(){a=(a+0x6D2B79F5)|0;let t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
+function m4(a,b){const o=new Float32Array(16);for(let c=0;c<4;c++)for(let r=0;r<4;r++)o[c*4+r]=a[r]*b[c*4]+a[4+r]*b[c*4+1]+a[8+r]*b[c*4+2]+a[12+r]*b[c*4+3];return o;}
+function persp(f,asp,n,fa){const t=1/Math.tan(f/2),nf=1/(n-fa);return new Float32Array([t/asp,0,0,0,0,t,0,0,0,0,(fa+n)*nf,-1,0,0,2*fa*n*nf,0]);}
+function lookAt(e,c,u){const z=norm(sub(e,c)),x=norm(cross(u,z)),y=cross(z,x);return new Float32Array([x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,e),-dot(y,e),-dot(z,e),1]);}
+function rotX(a){const c=Math.cos(a),s=Math.sin(a);return [1,0,0,0,0,c,s,0,0,-s,c,0,0,0,0,1];}
+function rotY(a){const c=Math.cos(a),s=Math.sin(a);return [c,0,-s,0,0,1,0,0,s,0,c,0,0,0,0,1];}
+function rotZ(a){const c=Math.cos(a),s=Math.sin(a);return [c,s,0,0,-s,c,0,0,0,0,1,0,0,0,0,1];}
+function trs(t,r,s){r=r||[0,0,0];const m=m4(rotY(r[1]),m4(rotX(r[0]),rotZ(r[2])));s=(typeof s==='number')?[s,s,s]:(s||[1,1,1]);
+  for(let i=0;i<3;i++){m[i]*=s[0];m[4+i]*=s[1];m[8+i]*=s[2];}m[12]=t[0];m[13]=t[1];m[14]=t[2];return m;}
+function orientZ(p,d,sx,sy,sz){const z=norm(d);const up=Math.abs(z[1])>0.95?[1,0,0]:[0,1,0];const x=norm(cross(up,z));const y=cross(z,x);
+  return new Float32Array([x[0]*sx,x[1]*sx,x[2]*sx,0,y[0]*sy,y[1]*sy,y[2]*sy,0,z[0]*sz,z[1]*sz,z[2]*sz,0,p[0],p[1],p[2],1]);}
+function orientY(p,d,s){const y=norm(d);const a=Math.abs(y[0])<0.9?[1,0,0]:[0,0,1];const x=norm(cross(y,a));const z=cross(x,y);
+  return new Float32Array([x[0]*s,x[1]*s,x[2]*s,0,y[0]*s,y[1]*s,y[2]*s,0,z[0]*s,z[1]*s,z[2]*s,0,p[0],p[1],p[2],1]);}
+function tp(M,p){return [M[0]*p[0]+M[4]*p[1]+M[8]*p[2]+M[12],M[1]*p[0]+M[5]*p[1]+M[9]*p[2]+M[13],M[2]*p[0]+M[6]*p[1]+M[10]*p[2]+M[14]];}
+
+/* ================= GL ================= */
+const canvas=document.getElementById('gl');
+let gl=null;
+try{gl=canvas.getContext('webgl',{antialias:true,alpha:false})||canvas.getContext('experimental-webgl');}catch(e){gl=null;}
+const deck=document.getElementById('deck');
+const slides=[...document.querySelectorAll('.slide')];
+const nav=document.getElementById('nav');
+document.getElementById('tot').textContent=slides.length;
+
+/* ---------- tier text (works without GL too) ---------- */
+const TIER_TEXT=[null,
+ '<b>Тир 1 · орбита Nauvis.</b> Хаб, фундамент, грузовые отсеки, сборщики, двигатели 1-го тира, пулемётные турели.',
+ '<b>Тир 2 · зона 1.</b> Двигатели 2-го тира на новом топливе, турели против средних астероидов, первый научный модуль.',
+ '<b>Тир 3 · зона 2.</b> Двигатели 3-го тира, энергия без солнца (на модели — реактор), больше баков топлива.',
+ '<b>Тир 4 · зона 3 и путь домой.</b> Двигатели 4-го тира, защита от огромных астероидов, запас на финальный отрезок.'];
+const tierInput=document.getElementById('tier');
+const tierText=document.getElementById('tierText');
+const state={tier:2};
+function setTier(v){state.tier=v;tierText.innerHTML=TIER_TEXT[v];}
+tierInput.addEventListener('input',()=>setTier(+tierInput.value));
+setTier(+tierInput.value);
+
+/* ---------- navigation ---------- */
+let active=-1;
+slides.forEach((s,i)=>{const b=document.createElement('button');b.title='Слайд '+(i+1);b.addEventListener('click',()=>go(i));nav.appendChild(b);});
+function go(i){i=clamp(i,0,slides.length-1);slides[i].scrollIntoView({behavior:'smooth'});}
+document.addEventListener('keydown',e=>{
+  if(e.target&&e.target.tagName==='INPUT')return;
+  const k=e.key;
+  if(['ArrowDown','PageDown',' ','ArrowRight'].includes(k)){e.preventDefault();go(active+1);}
+  else if(['ArrowUp','PageUp','ArrowLeft'].includes(k)){e.preventDefault();go(active-1);}
+  else if(k==='Home'){e.preventDefault();go(0);}else if(k==='End'){e.preventDefault();go(slides.length-1);}
+});
+const shade=document.getElementById('shade');
+let onSlide=function(){};
+function setActive(i){
+  if(i===active)return;active=i;
+  document.getElementById('cnt').textContent=i+1;
+  [...nav.children].forEach((b,j)=>b.classList.toggle('on',j===i));
+  shade.classList.toggle('strong',slides[i].dataset.shade==='strong');
+  try{history.replaceState(null,'','#s'+(i+1));}catch(e){}
+  onSlide(slides[i].dataset.scene);
+}
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting&&en.intersectionRatio>0.5)setActive(slides.indexOf(en.target));});},{root:deck,threshold:[0.5,0.75]});
+slides.forEach(s=>io.observe(s));
+const m0=/^#s(\d+)$/.exec(location.hash);
+const startIdx=m0?clamp(+m0[1]-1,0,slides.length-1):0;
+deck.style.scrollBehavior='auto';
+slides[startIdx].scrollIntoView();
+deck.style.scrollBehavior='';
+
+if(!gl){document.body.classList.add('nogl');setActive(startIdx);return;}
+
+/* ---------- shaders ---------- */
+const HP='#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n';
+const MESH_VS=`attribute vec3 aPos;attribute vec3 aNor;attribute vec3 aCol;attribute float aEmi;
+uniform mat4 uM;uniform mat4 uVP;uniform vec3 uTint;
+varying vec3 vN;varying vec3 vC;varying vec3 vW;varying float vE;
+void main(){vec4 w=uM*vec4(aPos,1.0);vW=w.xyz;vN=(uM*vec4(aNor,0.0)).xyz;vC=aCol*uTint;vE=aEmi;gl_Position=uVP*w;}`;
+const MESH_FS=HP+`uniform vec3 uL;uniform vec3 uLC;uniform vec3 uAmb;uniform vec3 uCam;uniform float uFog;uniform vec3 uFogC;uniform float uGlow;
+varying vec3 vN;varying vec3 vC;varying vec3 vW;varying float vE;
+void main(){vec3 n=normalize(vN);if(!gl_FrontFacing)n=-n;vec3 L=normalize(uL);vec3 V=normalize(uCam-vW);
+float d=max(dot(n,L),0.0);vec3 H=normalize(L+V);float s=pow(max(dot(n,H),0.0),28.0)*0.22;
+float rim=pow(1.0-max(dot(n,V),0.0),3.0)*0.16;
+vec3 c=vC*(uAmb+uLC*d)+uLC*s+rim*vec3(0.35,0.5,0.85);
+c=mix(c,vC*1.6,clamp(vE+uGlow,0.0,1.0));
+float f=1.0-exp(-length(uCam-vW)*uFog);c=mix(c,uFogC,f);
+gl_FragColor=vec4(c,1.0);}`;
+const PLAN_VS=`attribute vec3 aPos;attribute vec3 aNor;
+uniform mat4 uM;uniform mat4 uVP;
+varying vec3 vO;varying vec3 vN;varying vec3 vW;
+void main(){vec4 w=uM*vec4(aPos,1.0);vW=w.xyz;vO=aPos;vN=(uM*vec4(aNor,0.0)).xyz;gl_Position=uVP*w;}`;
+const PLAN_FS=HP+`uniform vec3 uL;uniform vec3 uCam;uniform float uT;uniform float uSeed;uniform float uMode;uniform vec3 uAtm;
+varying vec3 vO;varying vec3 vN;varying vec3 vW;
+float hash(vec3 p){p=fract(p*0.3183099+0.1);p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+float noise(vec3 x){vec3 i=floor(x);vec3 f=fract(x);f=f*f*(3.0-2.0*f);
+return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
+mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}
+float fbm(vec3 p){float v=0.0;float a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p=p*2.03+vec3(1.7,9.2,3.1);a*=0.5;}return v;}
+void main(){vec3 n=normalize(vN);vec3 L=normalize(uL);vec3 V=normalize(uCam-vW);float d=dot(n,L);vec3 p=normalize(vO);
+vec3 col=vec3(0.0);float a=1.0;
+if(uMode<0.5){
+ float h=fbm(p*2.3+uSeed);float m=fbm(p*5.0+uSeed*2.0);
+ vec3 land=mix(vec3(0.27,0.34,0.15),vec3(0.42,0.33,0.19),smoothstep(0.35,0.65,m));
+ vec3 water=vec3(0.05,0.14,0.18);
+ col=h<0.40?water:land;
+ float fac=smoothstep(0.60,0.68,fbm(p*15.0+3.1))*step(0.40,h);
+ col=mix(col,vec3(0.34,0.32,0.30),fac*0.85);
+ vec3 lit=col*(0.04+0.96*max(d,0.0));
+ vec3 lights=vec3(1.0,0.55,0.18)*fac*(1.0-smoothstep(-0.08,0.12,d))*1.3;
+ col=lit+lights;
+}else if(uMode<1.5){
+ float h=fbm(p*2.0+uSeed);
+ vec3 land=mix(vec3(0.16,0.42,0.16),vec3(0.58,0.52,0.32),smoothstep(0.5,0.72,fbm(p*4.0+7.0)));
+ vec3 ocean=mix(vec3(0.02,0.08,0.30),vec3(0.05,0.30,0.58),smoothstep(0.32,0.5,h));
+ col=h<0.5?ocean:land;
+ col=mix(col,vec3(0.92,0.95,1.0),smoothstep(0.80,0.88,abs(p.y)));
+ float spec=(h<0.5)?pow(max(dot(reflect(-L,n),V),0.0),40.0)*0.7:0.0;
+ col=col*(0.03+0.97*max(d,0.0))+vec3(1.0,0.95,0.8)*spec;
+}else if(uMode<2.5){
+ float g=fbm(p*6.0+vec3(uT*0.05));
+ col=mix(vec3(1.0,0.58,0.16),vec3(1.0,0.95,0.7),g)*1.25;
+}else if(uMode<3.5){
+ float rim=pow(1.0-max(dot(n,V),0.0),2.4);
+ col=uAtm*rim*clamp(d+0.35,0.0,1.0)*1.4;
+}else{
+ float c=fbm(p*3.4+vec3(uT*0.012,0.0,0.0)+uSeed);
+ a=smoothstep(0.52,0.70,c)*0.9;
+ col=vec3(1.0)*(0.03+0.97*max(d,0.0));
+}
+gl_FragColor=vec4(col,a);}`;
+const PT_VS=`attribute vec3 aPos;attribute vec3 aCol;attribute float aSize;
+uniform mat4 uVP;uniform float uPx;uniform float uMaxPt;
+varying vec3 vC;
+void main(){vec4 p=uVP*vec4(aPos,1.0);gl_Position=p;gl_PointSize=clamp(aSize*uPx/max(p.w,0.001),1.0,uMaxPt);vC=aCol;}`;
+const PT_FS=`precision mediump float;varying vec3 vC;
+void main(){vec2 q=gl_PointCoord-0.5;float r=length(q)*2.0;if(r>1.0)discard;float a=pow(1.0-r,1.7);gl_FragColor=vec4(vC*a,1.0);}`;
+
+function shader(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s;}
+function program(vs,fs,attrs){const p=gl.createProgram();gl.attachShader(p,shader(gl.VERTEX_SHADER,vs));gl.attachShader(p,shader(gl.FRAGMENT_SHADER,fs));
+  attrs.forEach((a,i)=>gl.bindAttribLocation(p,i,a));gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));
+  const u={};const n=gl.getProgramParameter(p,gl.ACTIVE_UNIFORMS);for(let i=0;i<n;i++){const inf=gl.getActiveUniform(p,i);u[inf.name]=gl.getUniformLocation(p,inf.name);}return {p,u};}
+let PM,PL,PP;
+try{PM=program(MESH_VS,MESH_FS,['aPos','aNor','aCol','aEmi']);PL=program(PLAN_VS,PLAN_FS,['aPos','aNor','aCol','aEmi']);PP=program(PT_VS,PT_FS,['aPos','aCol','aSize']);}
+catch(e){console.error(e);document.body.classList.add('nogl');setActive(startIdx);return;}
+let cur=null;function use(P){if(cur!==P){gl.useProgram(P.p);cur=P;}}
+function u3(P,n,v){const l=P.u[n];if(l)gl.uniform3fv(l,v);}
+function u1(P,n,v){const l=P.u[n];if(l)gl.uniform1f(l,v);}
+function uM(P,n,v){const l=P.u[n];if(l)gl.uniformMatrix4fv(l,false,v);}
+const maxPt=Math.min(256,gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)[1]||64);
+
+/* ---------- mesh builder ---------- */
+function Builder(){this.d=[];}
+Builder.prototype.tri=function(a,b,c,col,e){const n=cross(sub(b,a),sub(c,a));const l=Math.hypot(n[0],n[1],n[2]);if(l<1e-10)return;
+  const nx=n[0]/l,ny=n[1]/l,nz=n[2]/l,d=this.d,em=e||0;d.push(a[0],a[1],a[2],nx,ny,nz,col[0],col[1],col[2],em,b[0],b[1],b[2],nx,ny,nz,col[0],col[1],col[2],em,c[0],c[1],c[2],nx,ny,nz,col[0],col[1],col[2],em);};
+Builder.prototype.quad=function(a,b,c,d,col,e){this.tri(a,b,c,col,e);this.tri(a,c,d,col,e);};
+const BOXF=[[[1,-1,-1],[1,1,-1],[1,1,1],[1,-1,1]],[[-1,-1,-1],[-1,-1,1],[-1,1,1],[-1,1,-1]],[[-1,1,-1],[-1,1,1],[1,1,1],[1,1,-1]],[[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1]],[[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]],[[-1,-1,-1],[-1,1,-1],[1,1,-1],[1,-1,-1]]];
+Builder.prototype.box=function(cx,cy,cz,hx,hy,hz,col,e,M){for(const f of BOXF){const q=f.map(v=>{const p=[cx+v[0]*hx,cy+v[1]*hy,cz+v[2]*hz];return M?tp(M,p):p;});this.quad(q[0],q[1],q[2],q[3],col,e);}};
+Builder.prototype.cyl=function(M,r0,r1,y0,y1,seg,col,e,caps){for(let i=0;i<seg;i++){const a0=i/seg*TAU,a1=(i+1)/seg*TAU,c0=Math.cos(a0),s0=Math.sin(a0),c1=Math.cos(a1),s1=Math.sin(a1);
+  const b0=tp(M,[r0*c0,y0,r0*s0]),b1=tp(M,[r0*c1,y0,r0*s1]),t0=tp(M,[r1*c0,y1,r1*s0]),t1=tp(M,[r1*c1,y1,r1*s1]);
+  this.tri(b0,t0,t1,col,e);this.tri(b0,t1,b1,col,e);
+  if(caps){if(r1>0)this.tri(tp(M,[0,y1,0]),t1,t0,col,e);if(r0>0)this.tri(tp(M,[0,y0,0]),b0,b1,col,e);}}};
+Builder.prototype.sphere=function(M,la,lo,col,e){const P=(i,j)=>{const ph=-PI/2+PI*i/la,th=TAU*j/lo;return tp(M,[Math.cos(ph)*Math.cos(th),Math.sin(ph),Math.cos(ph)*Math.sin(th)]);};
+  for(let i=0;i<la;i++)for(let j=0;j<lo;j++){const p00=P(i,j),p01=P(i,j+1),p10=P(i+1,j),p11=P(i+1,j+1);this.tri(p00,p10,p11,col,e);this.tri(p00,p11,p01,col,e);}};
+Builder.prototype.seg=function(a,b,th,col,e){const m=mulS(add(a,b),0.5),d=sub(b,a),l=vlen(d);this.box(0,0,0,th,th,l/2,col,e,orientZ(m,d,1,1,1));};
+function mkMesh(arr){const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.STATIC_DRAW);return {b,n:arr.length/10};}
+function smoothSphere(la,lo){const d=[];const P=(i,j)=>{const ph=-PI/2+PI*i/la,th=TAU*j/lo;return [Math.cos(ph)*Math.cos(th),Math.sin(ph),Math.cos(ph)*Math.sin(th)];};
+  const v=p=>d.push(p[0],p[1],p[2],p[0],p[1],p[2],1,1,1,0);
+  for(let i=0;i<la;i++)for(let j=0;j<lo;j++){const p00=P(i,j),p01=P(i,j+1),p10=P(i+1,j),p11=P(i+1,j+1);v(p00);v(p10);v(p11);v(p00);v(p11);v(p01);}return mkMesh(d);}
+
+function bindMesh(m){gl.bindBuffer(gl.ARRAY_BUFFER,m.b);for(let i=0;i<4;i++)gl.enableVertexAttribArray(i);
+  gl.vertexAttribPointer(0,3,gl.FLOAT,false,40,0);gl.vertexAttribPointer(1,3,gl.FLOAT,false,40,12);gl.vertexAttribPointer(2,3,gl.FLOAT,false,40,24);gl.vertexAttribPointer(3,1,gl.FLOAT,false,40,36);}
+const ONE3=[1,1,1];
+function drawMesh(m,M,tint,glow){use(PM);uM(PM,'uM',M);u3(PM,'uTint',tint||ONE3);u1(PM,'uGlow',glow||0);bindMesh(m);gl.drawArrays(gl.TRIANGLES,0,m.n);}
+let SPHERE=null;
+function drawPlanet(pos,r,rot,mode,L,o){o=o||{};use(PL);uM(PL,'uM',trs(pos,[o.tilt||0,rot,0],r));u1(PL,'uMode',mode);u3(PL,'uL',L);u1(PL,'uSeed',o.seed||0);u3(PL,'uAtm',o.atm||[0.35,0.6,1]);bindMesh(SPHERE);gl.drawArrays(gl.TRIANGLES,0,SPHERE.n);}
+
+/* ---------- points ---------- */
+function PtList(cap){this.a=new Float32Array(cap*7);this.n=0;this.cap=cap;}
+PtList.prototype.add=function(x,y,z,r,g,b,s){if(this.n>=this.cap)return;const o=this.n*7,a=this.a;a[o]=x;a[o+1]=y;a[o+2]=z;a[o+3]=r;a[o+4]=g;a[o+5]=b;a[o+6]=s;this.n++;};
+PtList.prototype.addv=function(p,c,s,k){k=k==null?1:k;this.add(p[0],p[1],p[2],c[0]*k,c[1]*k,c[2]*k,s);};
+const dynBuf=gl.createBuffer();
+function staticPts(list){const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,list.a.subarray(0,list.n*7),gl.STATIC_DRAW);return {b,n:list.n};}
+function bindPts(b){gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.enableVertexAttribArray(0);gl.enableVertexAttribArray(1);gl.enableVertexAttribArray(2);gl.disableVertexAttribArray(3);
+  gl.vertexAttribPointer(0,3,gl.FLOAT,false,28,0);gl.vertexAttribPointer(1,3,gl.FLOAT,false,28,12);gl.vertexAttribPointer(2,1,gl.FLOAT,false,28,24);}
+function drawStatic(sp){use(PP);bindPts(sp.b);gl.drawArrays(gl.POINTS,0,sp.n);}
+function drawDyn(list){if(!list.n)return;use(PP);gl.bindBuffer(gl.ARRAY_BUFFER,dynBuf);gl.bufferData(gl.ARRAY_BUFFER,list.a.subarray(0,list.n*7),gl.DYNAMIC_DRAW);bindPts(dynBuf);gl.drawArrays(gl.POINTS,0,list.n);}
+const fx=new PtList(30000);
+
+function Parts(){this.a=[];}
+Parts.prototype.emit=function(p,v,life,c,s0,s1){if(this.a.length>5000)return;this.a.push({x:p[0],y:p[1],z:p[2],vx:v[0],vy:v[1],vz:v[2],l:life,m:life,c:c,s0:s0,s1:s1});};
+Parts.prototype.step=function(dt){const a=this.a;for(let i=a.length-1;i>=0;i--){const q=a[i];q.l-=dt;if(q.l<=0){a[i]=a[a.length-1];a.pop();continue;}q.x+=q.vx*dt;q.y+=q.vy*dt;q.z+=q.vz*dt;}};
+Parts.prototype.draw=function(L){for(const q of this.a){const k=q.l/q.m,i=k*k;L.add(q.x,q.y,q.z,q.c[0]*i,q.c[1]*i,q.c[2]*i,lerp(q.s1,q.s0,k));}};
+
+/* ---------- sky ---------- */
+const sky=(function(){const R=rng(7),L=new PtList(4200);
+  for(let i=0;i<3200;i++){const z=R()*2-1,a=R()*TAU,r=Math.sqrt(1-z*z);const p=[r*Math.cos(a)*500,z*500,r*Math.sin(a)*500];
+    const t=R();const c=t<0.15?[0.75,0.85,1]:t<0.25?[1,0.85,0.7]:[0.9,0.9,0.95];const b=0.35+Math.pow(R(),3)*1.1;L.add(p[0],p[1],p[2],c[0]*b,c[1]*b,c[2]*b,0.45+Math.pow(R(),4)*1.4);}
+  const blobs=[[[0.6,0.2,-0.77],[0.10,0.20,0.26]],[[-0.5,0.35,-0.8],[0.20,0.10,0.28]],[[0.2,-0.4,0.9],[0.13,0.08,0.05]],[[-0.8,-0.1,0.5],[0.06,0.16,0.20]]];
+  for(const [d,c] of blobs){const dn=norm(d);for(let i=0;i<70;i++){const p=add(mulS(dn,480),[(R()-.5)*190,(R()-.5)*120,(R()-.5)*190]);const k=0.10+R()*0.16;L.add(p[0],p[1],p[2],c[0]*k,c[1]*k,c[2]*k,50+R()*110);}}
+  return staticPts(L);})();
+
+/* ---------- ship ---------- */
+const PLUME=[null,[1,0.55,0.2],[0.25,0.9,0.85],[0.7,0.5,1],[1,0.85,0.45]];
+const LABC=[[0.25,0.9,0.85],[0.7,0.5,1],[1,0.72,0.3]];
+const SHIP_S=0.5;
+const shipCache={};
+function getShip(tier,unf){const k=tier+(unf?'u':'');if(!shipCache[k])shipCache[k]=buildShip(tier,unf);return shipCache[k];}
+function buildShip(tier,unf){
+  const B=new Builder(),R=rng(100+tier*7+(unf?50:0));
+  const L=10+6*(tier-1),W=6+2*(tier-1),z0=-L/2,glows=[],nozzles=[];
+  const rowW=z=>{const ff=L-1-z;return ff<3?Math.max(3,W-2*(3-ff)):W;};
+  for(let z=0;z<L;z++){const w=rowW(z);for(let x=0;x<w;x++){
+    if(unf&&z<L*0.42&&R()<0.5)continue;
+    const px=x-(w-1)/2,pz=z0+z+0.5,s=0.25+R()*0.07;B.box(px,0,pz,0.48,0.09,0.48,[s,s,s*1.07]);
+    if(x===0||x===w-1)B.box(px+(x===0?-0.43:0.43),0.11,pz,0.05,0.04,0.44,(z%2)?[0.92,0.55,0.12]:[0.07,0.07,0.07]);}}
+  const zf=z0+L-2.2;
+  B.box(0,0.55,zf,1.2,0.48,1.2,[0.25,0.25,0.27]);B.box(0,1.06,zf,0.95,0.04,0.95,[0.17,0.17,0.19]);
+  B.box(0,0.72,zf+1.22,0.85,0.11,0.02,[1,0.72,0.32],1);glows.push({p:[0,0.72,zf+1.3],c:[1,0.65,0.25],s:1.4});
+  B.box(0.6,1.5,zf-0.4,0.04,0.45,0.04,[0.5,0.5,0.5]);B.box(0.6,1.98,zf-0.4,0.07,0.07,0.07,[1,0.2,0.12],1);glows.push({p:[0.6,1.98,zf-0.4],c:[1,0.2,0.1],s:1.0,blink:1});
+  const n=2+2*tier,sp=(W-1.4)/(n-1),pc=PLUME[tier];
+  for(let i=0;i<n;i++){if(unf&&(i%2===1))continue;const x=-(n-1)/2*sp+i*sp;
+    B.box(x,0.42,z0+0.55,0.36,0.32,0.55,[0.2,0.2,0.21]);
+    B.cyl(trs([x,0.42,z0],[-PI/2,0,0]),0.26,0.45,0,0.95,12,[0.33,0.29,0.27],0,false);
+    if(!unf){B.cyl(trs([x,0.42,z0-0.86],[-PI/2,0,0]),0.38,0.38,0,0.04,12,pc,1,true);nozzles.push([x,0.42,z0-0.95]);}}
+  for(let k=0;k<tier;k++)for(const sx of [-1,1]){const zt=z0+2.8+k*2.8,x=sx*(W/2-1.7);const M=trs([x,0.55,zt],[PI/2,0,0]);
+    if(unf&&k>0&&sx>0)continue;
+    B.cyl(M,0.42,0.42,-1.2,1.2,12,[0.62,0.6,0.56],0,true);B.cyl(M,0.44,0.44,-0.86,-0.7,12,[0.9,0.5,0.12],0,false);B.cyl(M,0.44,0.44,0.7,0.86,12,[0.9,0.5,0.12],0,false);}
+  let zc=zf-2.4;
+  for(let k=0;k<tier-1;k++){const col=LABC[k];B.sphere(trs([0,0.25,zc],[0,0,0],[0.72,0.62,0.72]),6,10,[col[0]*0.6+0.15,col[1]*0.6+0.15,col[2]*0.6+0.15],0.35);
+    B.box(0,0.15,zc,0.8,0.08,0.8,[0.3,0.3,0.3]);glows.push({p:[0,0.85,zc],c:col,s:1.6});zc-=2.0;}
+  for(let k=0;k<tier+1;k++){if(unf&&k>1)break;B.box(0,0.38,zc,0.75,0.3,0.75,[0.36,0.27,0.17]);B.box(0,0.7,zc,0.6,0.03,0.6,[0.5,0.38,0.2]);zc-=2.0;}
+  if(tier>=3&&!unf){const zr=z0+3.2;B.box(0,0.6,zr,0.95,0.52,0.95,[0.3,0.33,0.31]);B.box(0,1.22,zr,0.34,0.12,0.34,[0.3,1,0.85],1);glows.push({p:[0,1.3,zr],c:[0.3,1,0.85],s:2.2});
+    B.box(0,0.24,zr,W/2-0.9,0.06,0.06,[0.85,0.35,0.1],0.35);B.box(0,0.24,zr+1.3,W/2-0.9,0.06,0.06,[0.85,0.35,0.1],0.35);}
+  const nt=tier+1;for(let k=0;k<nt;k++)for(const sx of [-1,1]){const zi=Math.floor(1.6+k*(L-5)/nt);const w=rowW(zi);const x=sx*(w-1)/2,z=z0+zi+0.5;
+    B.box(x,0.3,z,0.25,0.2,0.25,[0.3,0.3,0.28]);B.box(x,0.6,z,0.19,0.14,0.22,[0.42,0.4,0.32]);B.box(x,0.62,z+0.44,0.045,0.045,0.3,[0.18,0.18,0.18]);}
+  const zcl=z0+L-3.5;for(const sx of [-1,1]){const b=[sx*(W-1)/2,0.4,zcl];B.box(b[0],0.25,b[2],0.3,0.18,0.3,[0.35,0.33,0.3]);
+    const p1=add(b,[sx*0.6,0.9,0.6]),p2=add(p1,[sx*0.5,0.2,1.1]),p3=add(p2,[sx*0.1,-0.3,0.8]);
+    B.seg(b,p1,0.09,[0.8,0.58,0.2]);B.seg(p1,p2,0.08,[0.8,0.58,0.2]);B.seg(p2,p3,0.07,[0.8,0.58,0.2]);B.box(p3[0],p3[1],p3[2],0.14,0.14,0.14,[0.3,0.3,0.3]);glows.push({p:p3,c:[0.3,0.9,1],s:0.7});}
+  if(unf){const yc=[0.62,0.5,0.18];
+    for(let z=0;z<=Math.floor(L*0.5);z+=2)for(const sx of [-1,1]){const x=sx*(W/2);B.box(x,1.1,z0+z,0.05,1.1,0.05,yc);}
+    for(let z=0;z<Math.floor(L*0.5);z+=2)for(const sx of [-1,1]){const x=sx*(W/2);B.box(x,2.2,z0+z+1,0.05,0.05,1,yc);B.box(x,1.1,z0+z+1,0.04,0.04,1,yc);}
+    for(let z=0;z<=Math.floor(L*0.5);z+=4){B.box(0,2.2,z0+z,W/2,0.05,0.05,yc);glows.push({p:[-W/2,2.25,z0+z],c:[1,0.6,0.2],s:0.6});glows.push({p:[W/2,2.25,z0+z],c:[1,0.6,0.2],s:0.6});}
+    const gz=z0+L*0.3;B.box(-W/2-0.3,1.6,gz,0.12,1.6,0.12,[0.85,0.55,0.12]);B.box(W/2+0.3,1.6,gz,0.12,1.6,0.12,[0.85,0.55,0.12]);B.box(0,3.25,gz,W/2+0.42,0.14,0.14,[0.85,0.55,0.12]);
+    B.box(0.8,2.6,gz,0.02,0.6,0.02,[0.2,0.2,0.2]);B.box(0.8,1.95,gz,0.25,0.06,0.25,[0.4,0.4,0.4]);}
+  return {mesh:mkMesh(B.d),nozzles,glows,plume:pc,L,W,unf};
+}
+function drawShip(ship,t,lightsK){drawMesh(ship.mesh,trs([0,0,0],[0,0,0],SHIP_S));const k=lightsK||1;
+  for(const g of ship.glows){let b=k;if(g.blink)b*=(Math.sin(t*4)>0?1:0.15);fx.addv(mulS(g.p,SHIP_S),g.c,g.s*SHIP_S,0.55*b);}
+  for(const n of ship.nozzles)fx.addv(mulS(n,SHIP_S),ship.plume,1.1*SHIP_S,0.9);}
+function emitPlumes(parts,ship,dt,power){for(const nz of ship.nozzles){const c=Math.floor(46*power*dt+Math.random());const p0=mulS(nz,SHIP_S);
+  for(let i=0;i<c;i++)parts.emit([p0[0]+(Math.random()-.5)*0.1,p0[1]+(Math.random()-.5)*0.1,p0[2]],[(Math.random()-.5)*0.5,(Math.random()-.5)*0.5,-(4+Math.random()*3)*power],0.45+Math.random()*0.35,ship.plume,0.28,1.1);}}
+function Dust(n,ext,seed){const R=rng(seed);this.p=[];this.ext=ext;for(let i=0;i<n;i++)this.p.push([(R()-.5)*ext[0],(R()-.5)*ext[1],(R()-.5)*ext[2]]);}
+Dust.prototype.step=function(dt,v){const h=this.ext[2]/2;for(const p of this.p){p[2]-=v*dt;if(p[2]<-h)p[2]+=this.ext[2];}};
+Dust.prototype.draw=function(L,v,k){for(const p of this.p){for(let j=0;j<4;j++){const i=(1-j/4)*k;L.add(p[0],p[1],p[2]+j*v*0.012,0.6*i,0.65*i,0.75*i,0.09);}}};
+
+/* ---------- asteroids ---------- */
+function asteroidMesh(seed,base,vein,res){const R=rng(seed),lumps=[];
+  for(let k=0;k<8;k++){const z=R()*2-1,a=R()*TAU,r=Math.sqrt(1-z*z);lumps.push([[r*Math.cos(a),z,r*Math.sin(a)],(R()-0.35)*0.5,2+R()*5]);}
+  const ph=[R()*6,R()*6,R()*6],st=[0.8+R()*0.45,0.72+R()*0.35,0.8+R()*0.45];
+  const disp=n=>{let d=1;for(const l of lumps)d+=l[1]*Math.pow(Math.max(0,dot(n,l[0])),l[2]);d+=0.07*Math.sin(5*n[0]+ph[0])*Math.sin(4*n[1]+ph[1])*Math.sin(6*n[2]+ph[2]);return Math.max(0.45,d);};
+  const la=res,lo=Math.round(res*1.5),P=[];
+  for(let i=0;i<=la;i++){P.push([]);for(let j=0;j<=lo;j++){const phi=-PI/2+PI*i/la,th=TAU*(j%lo)/lo;const n=[Math.cos(phi)*Math.cos(th),Math.sin(phi),Math.cos(phi)*Math.sin(th)];const d=disp(n);P[i].push([n[0]*d*st[0],n[1]*d*st[1],n[2]*d*st[2]]);}}
+  const B=new Builder();
+  const colFor=(a,b,c)=>{const ce=norm(add(add(a,b),c));const v=Math.sin(9*ce[0]+3*Math.sin(5*ce[2]+ph[0])+ph[1]*2)+0.6*Math.sin(7*ce[1]+ph[2]);
+    if(vein&&Math.abs(v)<0.22)return [vein,1];const k=0.78+R()*0.4;return [[base[0]*k,base[1]*k,base[2]*k],0];};
+  for(let i=0;i<la;i++)for(let j=0;j<lo;j++){const p00=P[i][j],p01=P[i][j+1],p10=P[i+1][j],p11=P[i+1][j+1];
+    let c=colFor(p00,p10,p11);B.tri(p00,p10,p11,c[0],c[1]);c=colFor(p00,p11,p01);B.tri(p00,p11,p01,c[0],c[1]);}
+  return mkMesh(B.d);}
+const ROCK=[[0.46,0.43,0.40],[0.22,0.20,0.20],[0.50,0.56,0.62]];
+const RARE=[[0.25,0.95,0.88],[0.72,0.48,1],[1,0.72,0.28]];
+let AST=null,AST_R=null,BIGAST=null,UBOX=null,ROCKET=null;
+
+/* ---------- route ---------- */
+function routeP(s){const r=12+s*108,th=s*PI*2.4,y=Math.sin(s*PI*1.3)*10-s*4;return [r*Math.cos(th),y,r*Math.sin(th)];}
+function zoneCol(s){return s<0.12?[0.85,0.87,0.92]:s<0.40?[0.25,0.88,0.82]:s<0.68?[0.68,0.48,1]:s<0.95?[1,0.7,0.28]:[1,0.86,0.45];}
+
+/* ================= scenes ================= */
+const SC={};
+SC.shipyard={cam:{t:[0,-0.6,0],d:18,yaw:0.7,pitch:0.4,spin:0.05,fov:50},light:{L:[0.5,0.8,0.35],LC:[1,0.95,0.86],amb:[0.17,0.18,0.22]},
+  init(){this.ship=getShip(3,true);this.parts=new Parts();this.R=rng(3);this.C=[0,-38,-6];this.Rad=33;this.rockets=[];for(let i=0;i<4;i++)this.rockets.push(this.spawn(i*2.2));
+    const R=rng(9);this.robots=[];for(let i=0;i<46;i++)this.robots.push({c:[(R()-.5)*4.4,0.5+R()*1.7,(R()-.5)*10],r:0.3+R()*0.9,w:0.5+R()*1.2,ph:R()*TAU});
+    this.sparks=[];for(let i=0;i<10;i++)this.sparks.push({p:[(R()-.5)*4.5,0.3+R()*1.2,-5.5+R()*4.5],ph:R()*10});},
+  spawn(delay){const R=this.R;const d=norm([R()*0.5-0.25,1,R()*0.4-0.05]);const S=add(this.C,mulS(d,this.Rad));
+    return {S,P1:add(S,mulS(d,7)),P3:[(R()-.5)*3,-0.35,(R()-.5)*7],dur:6+R()*2,t:-delay};},
+  update(t,dt){this.parts.step(dt);
+    for(let i=0;i<this.rockets.length;i++){const r=this.rockets[i];r.t+=dt;if(r.t>r.dur){this.rockets[i]=this.spawn(0.5+this.R()*1.5);continue;}
+      if(r.t<0)continue;const u=Math.pow(r.t/r.dur,1.5);const P2=add(r.P3,[0,-5,0]);
+      const bz=u=>{const a=1-u;return add(add(mulS(r.S,a*a*a),mulS(r.P1,3*a*a*u)),add(mulS(P2,3*a*u*u),mulS(r.P3,u*u*u)));};
+      r.pos=bz(u);r.dir=norm(sub(bz(Math.min(1,u+0.01)),r.pos));
+      const tail=sub(r.pos,mulS(r.dir,0.05));const c=Math.floor(60*dt+Math.random());
+      for(let k=0;k<c;k++)this.parts.emit(tail,add(mulS(r.dir,-2.5),[(Math.random()-.5)*0.6,(Math.random()-.5)*0.6,(Math.random()-.5)*0.6]),0.5+Math.random()*0.4,[1,0.6,0.22],0.35,1.1);}
+    for(const s of this.sparks){if(Math.random()<dt*6){const p=add(mulS(s.p,1),[0,0,0]);for(let k=0;k<5;k++)this.parts.emit(p,[(Math.random()-.5)*2,Math.random()*1.5,(Math.random()-.5)*2],0.25+Math.random()*0.25,[0.75,0.85,1],0.12,0.05);}}},
+  draw(t){drawPlanet(this.C,this.Rad,t*0.008,0,this.light.L,{seed:1.3});
+    gl.enable(gl.CULL_FACE);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);gl.depthMask(false);drawPlanet(this.C,this.Rad*1.035,0,3,this.light.L,{atm:[0.22,0.42,0.7]});gl.depthMask(true);gl.disable(gl.BLEND);gl.disable(gl.CULL_FACE);
+    drawShip(this.ship,t);
+    for(const r of this.rockets){if(r.t<0||!r.pos)continue;drawMesh(ROCKET,orientY(r.pos,r.dir,0.75));}
+    for(const b of this.robots){const a=t*b.w+b.ph;const p=add(b.c,[Math.cos(a)*b.r,Math.sin(a*2)*0.15,Math.sin(a)*b.r]);fx.add(p[0],p[1],p[2],1,0.72,0.28,0.09);fx.add(p[0],p[1],p[2],0.25,0.18,0.07,0.4);}
+    for(const s of this.sparks){const f=Math.sin(t*13+s.ph*7);if(f>0.55)fx.addv(s.p,[0.7,0.85,1],0.5,(f-0.55)*2.2);}
+    this.parts.draw(fx);}};
+
+SC.route={cam:{t:[0,-4,0],d:330,yaw:0.4,pitch:0.9,spin:0.025,fov:45},light:{L:[0,1,0],LC:[1,1,1],amb:[0.2,0.2,0.2]},
+  init(){const R=rng(21),Lp=new PtList(9000);
+    for(let i=0;i<1400;i++){const s=i/1399,p=routeP(s),c=zoneCol(s);Lp.add(p[0],p[1],p[2],c[0]*0.75,c[1]*0.75,c[2]*0.75,0.55);}
+    for(let i=0;i<220;i++){const a=i/220*TAU;Lp.add(12*Math.cos(a),0,12*Math.sin(a),0.22,0.26,0.3,0.35);}
+    for(let i=0;i<4200;i++){const s=Math.pow(R(),0.85),c=routeP(s),rad=1.5+s*9;const z=R()*2-1,a=R()*TAU,rr=Math.cbrt(R())*rad,q=Math.sqrt(1-z*z);
+      const p=add(c,[q*Math.cos(a)*rr,z*rr*0.6,q*Math.sin(a)*rr]);const rare=s>0.12&&R()<0.1+0.3*s;
+      const col=rare?zoneCol(s):[0.42*(0.6+R()*0.5),0.4*(0.6+R()*0.5),0.38*(0.6+R()*0.5)];Lp.add(p[0],p[1],p[2],col[0],col[1],col[2],(0.3+s*1.4)*(rare?1.2:1));}
+    this.pts=staticPts(Lp);this.home=routeP(1);this.hs=add(this.home,[10,5,8]);
+    this.labels=[{t:'Солнце',p:[0,5,0]},{t:'Nauvis · верфь',p:[12,3,0]},{t:'Зона 1',p:add(routeP(0.26),[0,7,0]),c:'var(--teal)'},{t:'Зона 2',p:add(routeP(0.54),[0,9,0]),c:'var(--violet)'},{t:'Зона 3',p:add(routeP(0.82),[0,11,0]),c:'var(--amber)'},{t:'Дом',p:add(this.home,[0,7,0]),c:'var(--gold)'}];},
+  update(){},
+  draw(t,st){drawPlanet([0,0,0],3.5,t*0.02,2,[0,1,0],{});
+    const np=[12,0,0];drawPlanet(np,1.6,t*0.1,0,norm(mulS(np,-1)),{seed:1.3});
+    const hl=norm(sub(this.hs,this.home));drawPlanet(this.home,3,t*0.05,1,hl,{seed:4.1});drawPlanet(this.hs,1.3,t*0.03,2,[0,1,0],{});
+    gl.enable(gl.CULL_FACE);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);gl.depthMask(false);
+    drawPlanet(np,1.6*1.08,0,3,norm(mulS(np,-1)),{atm:[0.35,0.6,1]});drawPlanet(this.home,3*1.07,0,3,hl,{atm:[0.35,0.65,1]});
+    gl.depthMask(true);gl.disable(gl.BLEND);gl.disable(gl.CULL_FACE);
+    this.ptsDraw=true;
+    fx.add(0,0,0,0.55,0.3,0.1,34);fx.add(0,0,0,1,0.85,0.55,12);fx.addv(this.hs,[1,0.8,0.45],10,0.7);
+    const s=(st*0.035)%1;for(let k=0;k<40;k++){const ss=s-k*0.0025;if(ss<0)break;const p=routeP(ss),i=1-k/40;fx.addv(p,[1,1,1],k?1.0:2.6,k?0.35*i:1.2);}
+    fx.addv(routeP(s),zoneCol(s),7,0.6);},
+  late(){drawStatic(this.pts);}};
+
+SC.asteroids={cam:{t:[0,1.5,8],d:26,yaw:PI,pitch:0.38,sway:0.35,fov:50},light:{L:[-0.6,0.5,-0.4],LC:[0.92,0.92,1],amb:[0.13,0.14,0.18]},
+  init(){const B=new Builder(),R=rng(31);
+    for(let x=-13;x<=13;x++)for(let z=-5;z<=0;z++){const s=0.25+R()*0.07;B.box(x,0,z-0.5,0.48,0.09,0.48,[s,s,s*1.07]);}
+    for(let x=-13;x<=13;x++)B.box(x,0.12,0.05,0.48,0.04,0.06,(x%2)?[0.92,0.55,0.12]:[0.07,0.07,0.07]);
+    for(const x of [-7,0,7]){B.box(x,0.35,-0.6,0.55,0.28,0.55,[0.36,0.34,0.3]);B.box(x,0.7,-0.6,0.3,0.1,0.3,[0.6,0.45,0.18]);}
+    this.tx=[-10,-3.5,3.5,10];for(const x of this.tx){B.box(x,0.32,-2,0.45,0.25,0.45,[0.3,0.3,0.28]);}
+    B.box(-4,0.5,-3.8,1.2,0.4,0.6,[0.36,0.27,0.17]);B.box(5,0.5,-3.8,1.2,0.4,0.6,[0.36,0.27,0.17]);
+    this.plat=mkMesh(B.d);
+    this.ast=[];for(let i=0;i<80;i++)this.ast.push(this.newAst(R,true));
+    this.big={p:[2,3,60],hits:0,rot:0};this.parts=new Parts();this.tr=[];this.cool=[0,0.05,0.1,0.15];},
+  newAst(R,init){const rare=R()<0.3;return {p:[init?(R()-.5)*90:46+R()*4,-4+R()*16,3+R()*38],v:[-(1.2+R()*2.3),(R()-.5)*0.3,-R()*0.3],
+    m:rare?Math.floor(R()*6):Math.floor(R()*6),rare,ri:Math.floor(R()*3),s:0.25+R()*0.7,ax:[R()*2,R()*2,R()*2],ph:R()*TAU};},
+  update(t,dt){const R=Math.random;for(let i=0;i<this.ast.length;i++){const a=this.ast[i];a.p=add(a.p,mulS(a.v,dt));if(a.p[0]<-48)this.ast[i]=this.newAst(rng((t*1000|0)+i),false);}
+    const b=this.big;b.p[2]-=3.2*dt;b.rot+=dt*0.15;
+    if(b.p[2]<16||b.hits>70){for(let k=0;k<160;k++){const d=norm([R()-.5,R()-.5,R()-.5]);this.parts.emit(b.p,mulS(d,2+R()*7),0.6+R()*0.9,k%3?[1,0.6,0.2]:[0.9,0.9,1],0.5,0.15);}
+      for(let k=0;k<5;k++){const a=this.newAst(rng(k+(t*100|0)),true);a.p=add(b.p,[(R()-.5)*3,(R()-.5)*3,(R()-.5)*3]);a.v=[(R()-.5)*3,(R()-.5)*2,-1-R()*2];a.rare=R()<0.6;a.s=0.35+R()*0.3;this.ast.push(a);}
+      if(this.ast.length>110)this.ast.splice(0,this.ast.length-110);
+      b.p=[(R()-.5)*16,2+R()*5,70];b.hits=0;}
+    for(let i=0;i<this.tx.length;i++){this.cool[i]-=dt;const head=[this.tx[i],0.95,-2];const d=norm(sub(b.p,head));
+      if(b.p[2]<58&&this.cool[i]<=0){this.cool[i]=0.11+R()*0.05;this.tr.push({p:add(head,mulS(d,0.9)),d,v:55});}}
+    for(let i=this.tr.length-1;i>=0;i--){const q=this.tr[i];q.p=add(q.p,mulS(q.d,q.v*dt));if(vlen(sub(q.p,b.p))<3.2||q.p[2]>90){if(q.p[2]<=90){b.hits++;for(let k=0;k<6;k++)this.parts.emit(q.p,[(R()-.5)*4,(R()-.5)*4,-R()*3],0.25+R()*0.3,[1,0.7,0.3],0.4,0.1);}this.tr.splice(i,1);}}
+    this.parts.step(dt);},
+  draw(t){drawMesh(this.plat,trs([0,0,0]));
+    for(const x of this.tx){const head=[x,0.95,-2];const d=norm(sub(this.big.p,head));drawMesh(UBOX,trs(head,[0,Math.atan2(d[0],d[2]),0],[0.7,0.45,0.8]),[0.42,0.4,0.32]);
+      drawMesh(UBOX,orientZ(add(head,mulS(d,0.55)),d,0.12,0.12,1.1),[0.2,0.2,0.2]);}
+    for(let i=0;i<3;i++){const x=[-7,0,7][i],ph=i*2.1;let p=[x,0.8,-0.6];const yaw=0.45*Math.sin(t*0.5+ph);const p0=0.75+0.3*Math.sin(t*0.9+ph),bend=-0.42+0.16*Math.sin(t*1.3+ph);
+      for(let k=0;k<4;k++){const pit=p0+k*bend;const d=[Math.sin(yaw)*Math.cos(pit),Math.sin(pit),Math.cos(yaw)*Math.cos(pit)];const L=1.5-k*0.15;const q=add(p,mulS(d,L));
+        drawMesh(UBOX,orientZ(mulS(add(p,q),0.5),d,0.22-k*0.03,0.22-k*0.03,L),[0.82,0.6,0.2]);p=q;}
+      drawMesh(UBOX,trs(p,[t*0.5,t,0],0.32),[0.32,0.32,0.32]);fx.addv(p,[0.3,0.9,1],0.9,0.6);}
+    for(const a of this.ast){const m=a.rare?AST_R[a.ri][a.m%2]:AST[a.m%6];drawMesh(m,trs(a.p,[t*a.ax[0]*0.3+a.ph,t*a.ax[1]*0.3,t*a.ax[2]*0.2],a.s));
+      if(a.rare)fx.addv(a.p,RARE[a.ri],a.s*3.2,0.22);}
+    drawMesh(BIGAST,trs(this.big.p,[this.big.rot,this.big.rot*0.7,0],3));
+    for(const q of this.tr){fx.addv(q.p,[1,0.85,0.4],0.22,1);fx.addv(sub(q.p,mulS(q.d,0.5)),[1,0.6,0.2],0.16,0.6);}
+    this.parts.draw(fx);}};
+
+SC.ship={cam:{t:[0,0,0],d:13,yaw:0.9,pitch:0.5,spin:0.12,fov:50},light:{L:[0.45,0.9,0.25],LC:[1,0.96,0.9],amb:[0.17,0.18,0.23]},
+  init(){this.parts=new Parts();this.dust=new Dust(420,[40,24,90],5);this.dist=13;},
+  update(t,dt){const s=getShip(state.tier,false);this.ship=s;emitPlumes(this.parts,s,dt,1);this.parts.step(dt);this.dust.step(dt,14);
+    const want=6+state.tier*3.6;this.dist=lerp(this.dist,want,1-Math.exp(-dt*3));this.cam.d=this.dist;},
+  draw(t){drawShip(this.ship,t);this.parts.draw(fx);this.dust.draw(fx,14,0.5);}};
+
+SC.deep={cam:{t:[0,0,0],d:19,yaw:0.75,pitch:0.28,sway:0.3,fov:50},light:{L:[0.05,0.25,-1],LC:[0.5,0.52,0.62],amb:[0.1,0.11,0.15]},
+  init(){this.ship=getShip(4,false);this.parts=new Parts();this.dust=new Dust(700,[50,30,110],8);},
+  update(t,dt){emitPlumes(this.parts,this.ship,dt,1.25);this.parts.step(dt);this.dust.step(dt,32);},
+  draw(t){drawShip(this.ship,t,1.4);this.parts.draw(fx);this.dust.draw(fx,32,0.6);fx.add(0,8,-480,1,0.85,0.55,2.5);fx.add(0,8,-480,0.3,0.2,0.1,9);}};
+
+SC.home={cam:{t:[0,0,22],d:54,yaw:PI,pitch:0.3,sway:0.18,fov:50},light:{L:[-0.32,0.2,1],LC:[1,0.94,0.82],amb:[0.15,0.15,0.19]},
+  init(){this.ship=getShip(4,false);this.parts=new Parts();this.dust=new Dust(300,[50,30,110],12);this.P=[16,-12,150];this.star=[-200,120,-60];this.light.L=norm(this.star);},
+  update(t,dt){emitPlumes(this.parts,this.ship,dt,0.6);this.parts.step(dt);this.dust.step(dt,10);},
+  draw(t){const L=norm(sub(this.star,this.P));drawPlanet(this.P,58,t*0.006,1,L,{seed:4.1,tilt:0.25});
+    gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);drawPlanet(this.P,58*1.012,t*0.009,4,L,{seed:2.2,tilt:0.25});
+    gl.enable(gl.CULL_FACE);gl.blendFunc(gl.ONE,gl.ONE);drawPlanet(this.P,58*1.03,0,3,L,{atm:[0.35,0.62,1]});gl.disable(gl.CULL_FACE);gl.depthMask(true);gl.disable(gl.BLEND);
+    drawPlanet(this.star,7,t*0.02,2,[0,1,0],{});
+    drawShip(this.ship,t);this.parts.draw(fx);this.dust.draw(fx,10,0.35);fx.addv(this.star,[1,0.8,0.5],70,0.45);fx.addv(this.star,[1,0.95,0.8],24,0.9);}};
+
+SC.calm={cam:{t:[0,0,0],d:120,yaw:0.5,pitch:0.1,sway:0.06,fov:45},light:{L:[0.7,0.35,0.5],LC:[1,0.95,0.86],amb:[0.15,0.16,0.2]},
+  init(){const c=this.cam;const e=[Math.sin(c.yaw)*Math.cos(c.pitch)*c.d,Math.sin(c.pitch)*c.d,Math.cos(c.yaw)*Math.cos(c.pitch)*c.d];
+    const f=norm(mulS(e,-1)),r=norm(cross(f,[0,1,0]));this.P=add(add(mulS(r,22),mulS(f,10)),[0,-8,0]);this.Lp=norm([0.2,0.4,1]);
+    const R=rng(77);this.ast=[];for(let i=0;i<14;i++)this.ast.push({p:add(this.P,[(R()-.5)*120,(R()-.2)*40,30+R()*50]),m:Math.floor(R()*6),s:0.6+R()*1.6,ax:[R(),R(),R()],v:-(0.5+R())});},
+  update(t,dt){for(const a of this.ast){a.p[0]+=a.v*dt;if(a.p[0]<this.P[0]-80)a.p[0]+=160;}},
+  draw(t){drawPlanet(this.P,34,t*0.01,0,this.Lp,{seed:1.3});
+    gl.enable(gl.CULL_FACE);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);gl.depthMask(false);drawPlanet(this.P,34*1.035,0,3,this.Lp,{atm:[0.35,0.6,1]});gl.depthMask(true);gl.disable(gl.BLEND);gl.disable(gl.CULL_FACE);
+    for(const a of this.ast)drawMesh(AST[a.m],trs(a.p,[t*a.ax[0]*0.2,t*a.ax[1]*0.2,0],a.s));}};
+
+/* ---------- init resources ---------- */
+SPHERE=smoothSphere(40,64);
+UBOX=(function(){const B=new Builder();B.box(0,0,0,0.5,0.5,0.5,[1,1,1]);return mkMesh(B.d);})();
+ROCKET=(function(){const B=new Builder();const I=trs([0,0,0]);B.cyl(I,0.14,0.14,0,1.0,10,[0.86,0.86,0.83],0,true);B.cyl(I,0.14,0,1.0,1.35,10,[0.86,0.86,0.83],0,false);
+  B.cyl(I,0.145,0.145,0.68,0.78,10,[0.92,0.52,0.12],0,false);for(let k=0;k<4;k++){const a=k*PI/2;B.box(Math.cos(a)*0.18,0.12,Math.sin(a)*0.18,Math.abs(Math.cos(a))*0.08+0.02,0.12,Math.abs(Math.sin(a))*0.08+0.02,[0.2,0.2,0.2]);}return mkMesh(B.d);})();
+AST=[];for(let i=0;i<6;i++)AST.push(asteroidMesh(200+i,ROCK[i%3],null,9));
+AST_R=[];for(let r=0;r<3;r++){AST_R.push([asteroidMesh(300+r*2,[0.2,0.19,0.2],RARE[r],9),asteroidMesh(301+r*2,[0.25,0.23,0.22],RARE[r],9)]);}
+BIGAST=asteroidMesh(999,[0.4,0.37,0.34],null,16);
+for(const k in SC)SC[k].init();
+
+/* ---------- camera / input ---------- */
+let scene=SC[slides[startIdx].dataset.scene]||SC.calm,sceneT=0,uy=0,up=0;
+const labelsEl=document.getElementById('labels');const lblEls=SC.route.labels.map(l=>{const d=document.createElement('div');d.className='lbl';d.textContent=l.t;if(l.c)d.style.color=l.c;labelsEl.appendChild(d);return d;});
+let pending=null;
+onSlide=function(name){const next=SC[name]||SC.calm;if(next===scene&&!pending)return;
+  pending=next;canvas.classList.add('fade');lblEls.forEach(e=>e.style.display='none');
+  setTimeout(()=>{scene=pending;pending=null;sceneT=0;uy=0;up=0;canvas.classList.remove('fade');},380);};
+setActive(startIdx);
+let drag=null;
+deck.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0)return;if(e.target.closest('.card,#nav'))return;drag={x:e.clientX,y:e.clientY,s:e.target.closest('.slide')};if(drag.s)drag.s.classList.add('dragging');});
+window.addEventListener('pointermove',e=>{if(!drag)return;uy-=(e.clientX-drag.x)*0.006;up+=(e.clientY-drag.y)*0.004;drag.x=e.clientX;drag.y=e.clientY;});
+window.addEventListener('pointerup',()=>{if(drag&&drag.s)drag.s.classList.remove('dragging');drag=null;});
+deck.addEventListener('dblclick',e=>{if(!e.target.closest('.card')){uy=0;up=0;}});
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- loop ---------- */
+let last=performance.now()/1000,W=0,H=0;
+function resize(){const dpr=Math.min(window.devicePixelRatio||1,1.75);const w=Math.round(innerWidth*dpr),h=Math.round(innerHeight*dpr);if(w!==W||h!==H){W=w;H=h;canvas.width=w;canvas.height=h;}}
+function frame(nowMs){
+  requestAnimationFrame(frame);
+  const now=nowMs/1000;let dt=now-last;last=now;if(document.hidden)return;dt=Math.min(dt,0.05);sceneT+=dt;
+  resize();const sc=scene,c=sc.cam,t=now;
+  sc.update(t,dt);
+  const spin=(c.spin||0)*(reduce?0.2:1);
+  const yaw=c.yaw+spin*sceneT+(c.sway?Math.sin(sceneT*0.12)*c.sway:0)+uy;
+  const pitch=clamp(c.pitch+up,-1.35,1.35);
+  const eye=add(c.t,[Math.sin(yaw)*Math.cos(pitch)*c.d,Math.sin(pitch)*c.d,Math.cos(yaw)*Math.cos(pitch)*c.d]);
+  const fov=(c.fov||50)*PI/180;const proj=persp(fov,W/H,0.1,4000);
+  const wide=innerWidth>900;proj[8]=wide?-0.36:0;proj[9]=wide?0:-0.38;const view=lookAt(eye,c.t,[0,1,0]);const VP=m4(proj,view);
+  const vr=new Float32Array(view);vr[12]=0;vr[13]=0;vr[14]=0;const SVP=m4(proj,vr);
+  const px=H/(2*Math.tan(fov/2));
+  gl.viewport(0,0,W,H);gl.clearColor(0.012,0.016,0.024,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  use(PP);uM(PP,'uVP',SVP);u1(PP,'uPx',px);u1(PP,'uMaxPt',maxPt);
+  gl.disable(gl.DEPTH_TEST);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);drawStatic(sky);gl.disable(gl.BLEND);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);
+  use(PM);uM(PM,'uVP',VP);u3(PM,'uL',norm(sc.light.L));u3(PM,'uLC',sc.light.LC);u3(PM,'uAmb',sc.light.amb);u3(PM,'uCam',eye);u1(PM,'uFog',0);u3(PM,'uFogC',[0,0,0]);
+  use(PL);uM(PL,'uVP',VP);u3(PL,'uCam',eye);u1(PL,'uT',t);
+  use(PP);uM(PP,'uVP',VP);
+  fx.n=0;sc.draw(t,sceneT);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);gl.depthMask(false);
+  if(sc.late)sc.late();drawDyn(fx);
+  gl.depthMask(true);gl.disable(gl.BLEND);
+  if(sc===SC.route&&!pending){const cw=innerWidth,ch=innerHeight;SC.route.labels.forEach((l,i)=>{const p=l.p;const x=VP[0]*p[0]+VP[4]*p[1]+VP[8]*p[2]+VP[12],y=VP[1]*p[0]+VP[5]*p[1]+VP[9]*p[2]+VP[13],w=VP[3]*p[0]+VP[7]*p[1]+VP[11]*p[2]+VP[15];
+    const el=lblEls[i];if(w<=0.1){el.style.display='none';return;}el.style.display='block';el.style.left=((x/w*0.5+0.5)*cw)+'px';el.style.top=((1-(y/w*0.5+0.5))*ch)+'px';});}
+}
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
