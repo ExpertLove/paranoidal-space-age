@@ -163,7 +163,7 @@ h3{font-size:15px;line-height:1.2}
 .ck i{width:14px;height:14px;flex:none;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAB20lEQVR42u2Vv2sUQRTH387OMns3u8Pu7ZHGwHViYxHQNo1gbdKYQtsUdikkhFTxByKkVPwP0ohYBERIYaEBO8Fau2AE72Z2NsfdzdxuxurkWObMeicWst9yeO995v2YNwC1atX6b8QYu7N8aXnIQnbrd3buX4GF7Gar1XrleZ5HKd0oiuKrUuqzzdZZFBaG4Y120j5CCP2KNRgMfpx+P12y2aNFYFEUbZdhAAAIIX+Wz9zAOIr34ih+UoYBAIxGo/d/3MMgCDBj7CPGuFBKfZo6R02/eS+O46c2WJqmh0qr21rrsS0ungmkwRdKaccYcx0MfMvOsrcAABjj3aSVPCjbG2NAZvJIabXe7/fzWXHxjHI9pJR2AAAcx4EkSd6AA5vYxatRFN21+UgpX/d4b/2iVlintJ20PxCfrPjEb05nMLlAWZzzfZGK+1V6bx2aoijeTcMmoDLMGAOc8/1xPt6pOmzWocEYH+fj/Coh5IotowlMpOKZSMWW1vp8IaDWunBd92We59cIIZdtmQkhHlUtY6VnobU2w+HwwHGcTqPRWJmGdbvdNZnJF/O83wt3qYvdQ6206/v+KgAA7/FNeSYP5l0YlXZpEATIw95jc25O0ix9Xv+Ntf6pfgKS3a8sS7SCaQAAAABJRU5ErkJggg==) 0 0/14px 14px,url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAByUlEQVR42u2Wy27bMBBFDznDkShYdgyk2aTboP//Z3kAsi3x0QUjFd3KQFa+myEoYQ6HIHCvOxwONefMT0hE0ON4JJdMSolaK7VWgK3ulXNuq845VBXxgvaxx8zaBxy4fz/do+3wFSptPc8zasEYx5FhGOj7nq7rCCGgoojKLlhOmZQTy7Jwu924Xq9M08TX5xcqKsQ+cj6fOR1PxCEyDEODqu4CptRg0zRxmS58fH5QS2WaJnS93xAC1hnDMBBjxMwQ2TlhzszzvK3XwzvnUO893nvECyGEBjaj67q7JlxrCAHxwsppHR2Itk1Vbc/3u+5VSglVbcOowPcb9PywHsAH8AF8AB/A+9XcojaXLqWQUiLnvFnMXqdYe5RSyCnDd0TSUkrbLJllWViWZTPPvdDVgNd+ubRhSilorXWLBPNtZpLpPz+7N2LMtwZeU6ECePHN7S1s0UJE8M7vzp+lFMxsc30vrZeGEDgcDozjyPF4JPaRYGFz6z1a34IFQ1UppXC5XHh/f0d/PT/z+/WVp9OJGOMWLUQE9mbTWlHvCSJYUEwVC4Hb9Yr+eXvj5eWFzgwvgncO532LIHcAxXuqCCUEejOGGFHv+QvkQu+3WfNpjQAAAABJRU5ErkJggg==) 0 0/14px 14px}
 .ck img{width:28px;height:28px}
 .edge-img{width:190px;height:190px;margin:-8px auto -4px}
-.faq{display:grid;grid-template-columns:1fr;gap:10px}
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px}
 .faq b{display:block;color:var(--cap);font-weight:700;margin-bottom:2px}
 
 /* tooltip (dark frame, bold caption) */
@@ -179,7 +179,7 @@ h3{font-size:15px;line-height:1.2}
  .tab{min-width:0;flex:none}
  .tabbody{padding:10px}
  .slide.on{flex-direction:column;height:auto}
- .start-text,.pgrid,.checks,.mat,.prices,.rule{grid-template-columns:1fr}
+ .start-text,.pgrid,.checks,.mat,.prices,.rule,.faq{grid-template-columns:1fr}
  .cast{flex-wrap:wrap;justify-content:center;gap:8px}
  .techs{flex-direction:column;align-items:center}
  .tech + .tech::before{display:none}
@@ -766,16 +766,19 @@ h3{font-size:15px;line-height:1.2}
  <div class="deep grow">
   <div class="faq">
    <div><b>Нужно ли дополнение Space Age?</b>Да, без него не будет ни платформ, ни планет.</div>
-   <hr>
    <div><b>Можно продолжить старое сохранение?</b>Да, можно.</div>
    <hr>
-   <div><b>А варп и стражи из прошлой презентации?</b>От варпа отказались. Вместо него планеты Space Age и сторонних модов.</div>
-   <hr>
+   <div><b>Можно начать игру на другой планете?</b>Нет, старт всегда на Наувисе. Планеты открываются после ракеты.</div>
    <div><b>Что стало со SpaceX?</b>В этой ветке SpaceX нет. Конец игры теперь на Границе солнечной системы.</div>
    <hr>
    <div><b>Можно пропустить планету?</b>Нет. Для победы нужны все девять мест, включая Секрету.</div>
-   <hr>
    <div><b>Где делать космическую науку?</b>Только на космической платформе, рецепт работает в невесомости.</div>
+   <hr>
+   <div><b>Есть ли враги на планетах?</b>Да. На Вулкане разрушители, на Глебе пятиноги.</div>
+   <div><b>Нужно ли защищать платформу?</b>Да, в полёте в неё летят астероиды. Их сбивают турели на платформе.</div>
+   <hr>
+   <div><b>Зачем лететь дальше Границы?</b>За ней Разрушенная планета с прометием. Из него делают Прометиевый исследовательский пакет для Продуктивности исследований.</div>
+   <div><b>Будут ли ещё планеты?</b>Да. Их будут добавлять следующими обновлениями, и начатая игра продолжится с ними.</div>
   </div>
  </div>
 </section>
